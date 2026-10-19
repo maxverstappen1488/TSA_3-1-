@@ -99,7 +99,7 @@ unsigned int bubble_algorithm(massive<int>& arr) {
 }
 
 /**
- * @brief Сортировка вставками
+ * @brief Сортировка вставками с бинарным поиском
  */
 unsigned int insert_algorithm(massive<int>& arr) {
     if (arr.size() <= 1) return 0;
@@ -120,12 +120,9 @@ unsigned int insert_algorithm(massive<int>& arr) {
             }
         }
         
-        // Сдвиг элементов вправо, чтобы освободить место
-        for (size_t j = i; j > start; j--) {
-            arr[j] = arr[j - 1];
-        }
-        // Вставка элемента
-        arr[start] = val;
+        // Используем insert вместо ручного сдвига
+        arr.erase(arr.begin() + i);
+        arr.insert(arr.begin() + start, val);
     }
     return ops;
 }
@@ -143,12 +140,7 @@ unsigned int Hoar_algorithm(massive<int>& arr) {
     massive<int> middle_pile;
     massive<int> right_pile;
     
-    // Резервируем память, чтобы избежать лишних перевыделений
-    left_pile.reserve(arr.size());
-    middle_pile.reserve(arr.size());
-    right_pile.reserve(arr.size());
-    
-    // Раскидываем элементы по трем кучкам
+    // Раскидываем элементы по трем кучкам (без reserve, просто push_back)
     for (int x : arr) {
         ops++; //x < pivot
         if (x < pivot) {
